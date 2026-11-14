@@ -1,0 +1,148 @@
+:root {
+  --night: #131110;
+  --amber: 255, 170, 60;     /* used as rgba(var(--amber), x) */
+  --text: #ece4d8;
+  --muted: #9a9185;
+}
+
+* { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  display: grid;
+  place-items: center;
+  background: var(--night);
+  color: var(--text);
+  font-family: "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Warm light that fills the room when the bulb is on */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 60% 60% at 35% 42%, rgba(var(--amber), 0.30), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.7s ease;
+}
+body.on::before { opacity: 1; }
+
+.room {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 56px 96px;
+  padding: 40px 24px;
+}
+
+/* ---------- Bulb ---------- */
+.bulb {
+  position: relative;
+  width: 320px;
+  height: 340px;
+}
+
+.bulb-img {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  height: 340px;
+  width: auto;
+  transform: translateX(-50%);
+  transition: opacity 0.35s ease;
+  /* fade the picture's edges so it blends into the page */
+  -webkit-mask-image: radial-gradient(ellipse closest-side, #000 72%, transparent 100%);
+          mask-image: radial-gradient(ellipse closest-side, #000 72%, transparent 100%);
+}
+
+.bulb-on { opacity: 0; }
+body.on .bulb-on  { opacity: 1; }
+body.on .bulb-off { opacity: 0; }
+
+/* quick flicker when the bulb turns on */
+body.flicker .bulb-on { animation: flicker 0.45s steps(1, end); }
+
+@keyframes flicker {
+  0%   { opacity: 0.2; }
+  20%  { opacity: 1; }
+  35%  { opacity: 0.4; }
+  55%  { opacity: 1; }
+  70%  { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+/* ---------- Switch ---------- */
+.panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.switch {
+  padding: 0;
+  border: 0;
+  border-radius: 26px;
+  overflow: hidden;
+  cursor: pointer;
+  background: #fff;
+  line-height: 0;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+  transform: perspective(700px) rotateX(-9deg);   /* off: bottom pressed in */
+  transition: transform 0.18s ease, box-shadow 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.switch img {
+  display: block;
+  width: 260px;
+  height: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+  filter: brightness(0.88);
+  transition: filter 0.25s ease;
+}
+
+body.on .switch {
+  transform: perspective(700px) rotateX(9deg);    /* on: top pressed in */
+  box-shadow: 0 18px 50px rgba(var(--amber), 0.25);
+}
+body.on .switch img { filter: brightness(1.02); }
+
+.switch:active { scale: 0.98; }
+
+.switch:focus-visible,
+.sound:focus-visible {
+  outline: 3px solid rgb(var(--amber));
+  outline-offset: 4px;
+}
+
+/* ---------- Text ---------- */
+.status {
+  margin: 0;
+  font-size: 1.05rem;
+  letter-spacing: 0.01em;
+}
+
+.sound {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 6px 16px;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+.sound:hover { color: var(--text); border-color: rgba(255, 255, 255, 0.4); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before { transition-duration: 0.01ms !important; animation: none !important; }
+}

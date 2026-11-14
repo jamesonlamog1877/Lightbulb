@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Light switch</title>
+  <link rel="stylesheet" href="sstyle.css">
+</head>
+<body>
+  <main class="room">
+
+    <!-- The bulb: both pictures are stacked, we just fade between them -->
+    <section class="bulb" id="bulb">
+      <img class="bulb-img bulb-off" src="images/bulb off.jpg" alt="Light bulb, off">
+      <img class="bulb-img bulb-on"  src="images/Bulb on.jpg"  alt="Light bulb, on">
+    </section>
+
+    <!-- The switch -->
+    <section class="panel">
+      <button id="switch" class="switch" type="button" role="switch" aria-checked="false" aria-label="Light switch">
+        <img src="images/switch.jpg" alt="Red rocker switch">
+      </button>
+      <p id="status" class="status" aria-live="polite">The light is off</p>
+      <button id="sound" class="sound" type="button" aria-pressed="true">Sound on</button>
+    </section>
+
+  </main>
+
+  <script src="document.js"></script>
+</body>
+</html>
